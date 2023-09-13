@@ -46,7 +46,9 @@ public class SelectFace : MonoBehaviour
                     if (cubeSide.Contains(face))
                     {
                         //Pick it up
-                        cubeState.PickUp(cubeSide);
+                        //cubeState.PickUp(cu
+                            
+                        //    beSide);
                         //start the side rotation logic
                         cubeSide[4].transform.parent.GetComponent<PivotRotation>().Rotate(cubeSide);
                     }

@@ -5,12 +5,19 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class MainRubikRotation : MonoBehaviour
 {
-    private bool isRotating = false;
+    public bool isRotating = false;
     private float rotationSpeed = 3.0f; // Adjust the speed as needed
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q) && !isRotating)
+        {
+            StartCoroutine(RotateObjectY());
+        }
+    }
+
+    public void RotateRubiks()
+    {
+        if (!isRotating)
         {
             StartCoroutine(RotateObjectY());
         }

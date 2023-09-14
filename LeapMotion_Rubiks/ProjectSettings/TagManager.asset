@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Core
   - Pieces
+  - CenterCore
   layers:
   - Default
   - TransparentFX

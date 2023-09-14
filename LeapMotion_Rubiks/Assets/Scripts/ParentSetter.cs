@@ -8,43 +8,80 @@ public class ParentSetter : MonoBehaviour
     public KeyCode rotateKey;
     public GameObject core;
     public List<GameObject> pieces = new List<GameObject>();
+    //public MainRubikRotation mainRoa
+    bool multiCores;
+    public MainRubikRotation rubikRotation;
+    Piece[] cubePiece;
 
+    private void Start()
+    {
+        cubePiece = FindObjectsOfType<Piece>();
+    }
 
     private void Update()
     {
         if (Input.GetKeyDown(rotateKey))
         {
-            if (core != null)
-            {
-                // Get the current rotation of the core
-                Vector3 currentRotation = core.transform.rotation.eulerAngles;
-
-                // Modify the rotation values
-                currentRotation.x = 0f;
-                currentRotation.y = 0; // Set to a constant value
-                currentRotation.z += 90f; // Set to a constant value
-
-                // Apply the new rotation to the core
-                core.transform.rotation = Quaternion.Euler(currentRotation);
-            }
+            Rotate();
         }
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Rotate()
     {
-        if(other.tag == "Core")
+        if (core != null && !rubikRotation.isRotating)
+        {
+            // Rotate the core around the world Z-axis by +90 degrees
+            core.transform.Rotate(Vector3.forward, 90f, Space.World);
+
+            StartCoroutine(DetectMatchedColors());
+        }
+    }
+
+    IEnumerator DetectMatchedColors()
+    {
+        yield return new WaitForSeconds(0.5f);
+        foreach (Piece piece in cubePiece)
+        {
+            piece.DetectMatchingColors();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "CenterCore")
+        {
+            core = other.gameObject;
+            multiCores = true;
+        }
+        else if (other.tag == "Core" && !multiCores)
         {
             core = other.gameObject;
         }
 
-        if(other.tag == "Pieces")
+        if (multiCores)
         {
-            pieces.Add(other.gameObject);
+            if (other.tag == "Pieces" || other.tag == "Core")
+            {
+                if (!pieces.Contains(other.gameObject))
+                {
+                    pieces.Add(other.gameObject);
+                }
+            }
+        }
+        else
+        {
+            if (other.tag == "Pieces")
+            {
+                if (!pieces.Contains(other.gameObject))
+                {
+                    pieces.Add(other.gameObject);
+                }
+            }
         }
 
 
-        if(core != null)
+        if (core != null)
         {
             SetPiecesToCore();
         }
@@ -56,13 +93,14 @@ public class ParentSetter : MonoBehaviour
         {
             piece.transform.SetParent(rubikParent);
         }
+        // multiCores = false;
         core = null; ;
         pieces.Clear();
     }
 
     void SetPiecesToCore()
     {
-        foreach(var piece in pieces)
+        foreach (var piece in pieces)
         {
             piece.transform.SetParent(core.transform);
         }

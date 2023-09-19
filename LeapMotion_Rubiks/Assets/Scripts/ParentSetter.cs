@@ -12,12 +12,14 @@ public class ParentSetter : MonoBehaviour
     bool multiCores;
     public MainRubikRotation rubikRotation;
     Piece[] cubePiece;
+    public ColorMatchDetector[] colorMatchDetector;
     public float rotationAmount;
     public bool horizontal;
     bool rotating;
 
     private void Start()
     {
+        colorMatchDetector = FindObjectsOfType<ColorMatchDetector>();
         cubePiece = FindObjectsOfType<Piece>();
     }
 
@@ -35,8 +37,10 @@ public class ParentSetter : MonoBehaviour
     IEnumerator UnParent()
     {
         yield return new WaitForSeconds(0.1f);
+
         rotating = false;
         UnParentPieces();
+        DetectColor();
     }
 
     void Rotate()
@@ -51,6 +55,14 @@ public class ParentSetter : MonoBehaviour
             {
                 core.transform.Rotate(Vector3.up, 90f, Space.World);
             }
+        }
+    }
+
+    void DetectColor()
+    {
+        foreach (ColorMatchDetector colorMatchDetector in colorMatchDetector)
+        {
+            colorMatchDetector.CheckMatchingColors();
         }
     }
 

@@ -7,6 +7,12 @@ public class MainRubikRotation : MonoBehaviour
 {
     public bool isRotating = false;
     private float rotationSpeed = 3.0f; // Adjust the speed as needed
+    public ColorMatchDetector[] colorMatchDetector;
+
+    private void Start()
+    {
+        colorMatchDetector = FindObjectsOfType<ColorMatchDetector>();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q) && !isRotating)
@@ -20,6 +26,14 @@ public class MainRubikRotation : MonoBehaviour
         if (!isRotating)
         {
             StartCoroutine(RotateObjectY());
+        }
+    }
+
+    void DetectColor()
+    {
+        foreach (ColorMatchDetector colorMatchDetector in colorMatchDetector)
+        {
+            colorMatchDetector.CheckMatchingColors();
         }
     }
 
@@ -38,5 +52,6 @@ public class MainRubikRotation : MonoBehaviour
 
         transform.rotation = endRotation;
         isRotating = false;
+        DetectColor();
     }
 }

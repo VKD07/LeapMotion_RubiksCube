@@ -17,7 +17,7 @@ public class Piece : MonoBehaviour
         cubeRenderer = GetComponent<Renderer>();
         colorMatch = FindObjectOfType<ColorMatch>();
         gameScore = FindObjectOfType<GameScore>();
-        DetectMatchingColors();
+       // DetectMatchingColors();
     }
 
     private void Update()

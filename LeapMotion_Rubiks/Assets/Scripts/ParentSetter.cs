@@ -12,6 +12,9 @@ public class ParentSetter : MonoBehaviour
     bool multiCores;
     public MainRubikRotation rubikRotation;
     Piece[] cubePiece;
+    public float rotationAmount;
+    public bool horizontal;
+    bool rotating;
 
     private void Start()
     {
@@ -20,27 +23,40 @@ public class ParentSetter : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(rotateKey))
+        if (Input.GetKeyDown(rotateKey) && !rotating)
         {
+            rotating = true;
+            SetPiecesToCore();
             Rotate();
+            StartCoroutine(UnParent());
         }
-
     }
 
-    public void Rotate()
+    IEnumerator UnParent()
+    {
+        yield return new WaitForSeconds(0.1f);
+        rotating = false;
+        UnParentPieces();
+    }
+
+    void Rotate()
     {
         if (core != null && !rubikRotation.isRotating)
         {
-            // Rotate the core around the world Z-axis by +90 degrees
-            core.transform.Rotate(Vector3.forward, 90f, Space.World);
-
-            StartCoroutine(DetectMatchedColors());
+            if (!horizontal)
+            {
+                core.transform.Rotate(Vector3.forward, 90f, Space.World);
+            }
+            else
+            {
+                core.transform.Rotate(Vector3.up, 90f, Space.World);
+            }
         }
     }
 
     IEnumerator DetectMatchedColors()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         foreach (Piece piece in cubePiece)
         {
             piece.DetectMatchingColors();
@@ -79,24 +95,24 @@ public class ParentSetter : MonoBehaviour
                 }
             }
         }
-
-
-        if (core != null)
-        {
-            SetPiecesToCore();
-        }
     }
 
     private void OnTriggerExit(Collider other)
+    {
+        UnParentPieces();
+    }
+
+    void UnParentPieces()
     {
         foreach (var piece in pieces)
         {
             piece.transform.SetParent(rubikParent);
         }
         // multiCores = false;
-        core = null; ;
+        core = null;
         pieces.Clear();
     }
+
 
     void SetPiecesToCore()
     {

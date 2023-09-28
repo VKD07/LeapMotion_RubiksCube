@@ -65,8 +65,6 @@ public class ColorMatchDetector : MonoBehaviour
         renderer.material = colorMatch.colors[randomColor];
     }
 
-
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Pieces") || other.CompareTag("Core") || other.CompareTag("CenterCore"))

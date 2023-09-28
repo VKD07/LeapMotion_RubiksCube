@@ -8,10 +8,12 @@ public class MainRubikRotation : MonoBehaviour
     public bool isRotating = false;
     private float rotationSpeed = 3.0f; // Adjust the speed as needed
     public ColorMatchDetector[] colorMatchDetector;
+    public ParentSetter[] parentSetters; 
 
     private void Start()
     {
         colorMatchDetector = FindObjectsOfType<ColorMatchDetector>();
+        parentSetters = FindObjectsOfType<ParentSetter>();
     }
     private void Update()
     {
@@ -26,6 +28,14 @@ public class MainRubikRotation : MonoBehaviour
         if (!isRotating)
         {
             StartCoroutine(RotateObjectY());
+        }
+    }
+
+    public void UnparentPieces()
+    {
+        foreach(var parent in parentSetters)
+        {
+            parent.UnParentPieces();
         }
     }
 

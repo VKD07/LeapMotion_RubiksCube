@@ -15,7 +15,7 @@ public class ParentSetter : MonoBehaviour
     public ColorMatchDetector[] colorMatchDetector;
     public float rotationAmount;
     public bool horizontal;
-    bool rotating;
+    public static bool rotating;
 
     private void Start()
     {
@@ -28,19 +28,32 @@ public class ParentSetter : MonoBehaviour
         if (Input.GetKeyDown(rotateKey) && !rotating)
         {
             rotating = true;
-            SetPiecesToCore();
-            Rotate();
+            //SetPiecesToCore();
+            //Rotate();
+            StartCoroutine(RotatePieces());
             StartCoroutine(UnParent());
         }
+
+        if (!rotating)
+        {
+            core = null;
+            pieces.Clear();
+        }
+    }
+
+    IEnumerator RotatePieces()
+    {
+        yield return new WaitForSeconds(0.1f);
+        SetPiecesToCore();
+        Rotate();
+        //DetectColor();
     }
 
     IEnumerator UnParent()
     {
-        yield return new WaitForSeconds(0.1f);
-
-        rotating = false;
+        yield return new WaitForSeconds(0.4f);
         UnParentPieces();
-        DetectColor();
+        //DetectColor();
     }
 
     void Rotate()
@@ -49,11 +62,13 @@ public class ParentSetter : MonoBehaviour
         {
             if (!horizontal)
             {
-                core.transform.Rotate(Vector3.forward, 90f, Space.World);
+                //core.transform.Rotate(Vector3.forward, 90f, Space.World);
+                LeanTween.rotateAround(core, Vector3.forward, 90f, 0.2f);
             }
             else
             {
-                core.transform.Rotate(Vector3.up, 90f, Space.World);
+                LeanTween.rotateAround(core, Vector3.up, 90f, .2f);
+                //core.transform.Rotate(Vector3.up, 90f, Space.World);
             }
         }
     }
@@ -77,52 +92,62 @@ public class ParentSetter : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "CenterCore")
+        if (rotating)
         {
-            core = other.gameObject;
-            multiCores = true;
-        }
-        else if (other.tag == "Core" && !multiCores)
-        {
-            core = other.gameObject;
-        }
-
-        if (multiCores)
-        {
-            if (other.tag == "Pieces" || other.tag == "Core")
+            if (other.tag == "CenterCore")
             {
-                if (!pieces.Contains(other.gameObject))
+                core = other.gameObject;
+                multiCores = true;
+            }
+            else if (other.tag == "Core" && !multiCores)
+            {
+                core = other.gameObject;
+            }
+
+            if (multiCores)
+            {
+                if (other.tag == "Pieces" || other.tag == "Core")
                 {
-                    pieces.Add(other.gameObject);
+                    if (!pieces.Contains(other.gameObject))
+                    {
+                        pieces.Add(other.gameObject);
+                    }
                 }
             }
-        }
-        else
-        {
-            if (other.tag == "Pieces")
+            else
             {
-                if (!pieces.Contains(other.gameObject))
+                if (other.tag == "Pieces")
                 {
-                    pieces.Add(other.gameObject);
+                    if (!pieces.Contains(other.gameObject))
+                    {
+                        pieces.Add(other.gameObject);
+                    }
                 }
             }
         }
     }
+
 
     private void OnTriggerExit(Collider other)
     {
-        UnParentPieces();
+        //UnParentPieces();
     }
 
-    void UnParentPieces()
+    public void UnParentPieces()
     {
         foreach (var piece in pieces)
         {
             piece.transform.SetParent(rubikParent);
         }
+        rotating = false;
         // multiCores = false;
-        core = null;
-        pieces.Clear();
+        //StartCoroutine(ClearList());
+    }
+
+    IEnumerator ClearList()
+    {
+        yield return new WaitForSeconds(0.7f);
+      
     }
 
 

@@ -599,6 +599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRotating: 0
   colorMatchDetector: []
+  parentSetters: []
 --- !u!1 &139560185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,8 +1362,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.650502, y: 1, z: 0.24913354}
-  m_Center: {x: -0.1747492, y: 0, z: 0.075214714}
+  m_Size: {x: 0.650502, y: 0.9999998, z: 0.10065374}
+  m_Center: {x: -0.1747492, y: 2.826205e-17, z: 0.14945462}
 --- !u!23 &367967494
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4820,6 +4821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRotating: 0
   colorMatchDetector: []
+  parentSetters: []
 --- !u!1 &1343539276
 GameObject:
   m_ObjectHideFlags: 0
@@ -5675,8 +5677,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.650502, y: 1, z: 0.24913354}
-  m_Center: {x: -0.1747492, y: 0, z: 0.075214714}
+  m_Size: {x: 0.65107363, y: 0.9999998, z: 0.16550152}
+  m_Center: {x: -0.1744635, y: 1.4034571e-16, z: 0.11703074}
 --- !u!23 &1438548092
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6578,6 +6580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRotating: 0
   colorMatchDetector: []
+  parentSetters: []
 --- !u!4 &1618014015
 Transform:
   m_ObjectHideFlags: 0
